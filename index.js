@@ -6,19 +6,23 @@ const ExcelJS = require('exceljs');
 async function processXLSXFile(filePath) {
 	const workbook = new ExcelJS.Workbook();
 	await workbook.xlsx.readFile(filePath);
-	const newImageFilePath = path.join(__dirname, 'POTF.png');
-
 	// Loop through each worksheet in the XLSX file
 	workbook.eachSheet(worksheet => {
 		// Loop through all rows and columns in the worksheet
 		worksheet.eachRow(row => {
 			row.eachCell(cell => {
+				if (
+					cell.address == 'C1' &&
+					cell.value == 'i-PIMS (PETRONAS Integrated Pipeline Integrity Assurance Solutions)'
+				) {
+					cell.value = 'i-PIMS (Integrated Pipeline Integrity Assurance Solutions)';
+				}
 				if (cell.fill && cell.fill.type === 'pattern' && cell.fill.fgColor && cell.fill.fgColor.argb === 'FF00B3BC') {
 					// Change the background color to #20419A
 					cell.fill = {
 						type: 'pattern',
 						pattern: 'solid',
-						fgColor: { argb: 'FF20419A' }, // Set the new color here
+						fgColor: { argb: 'FF20419A' } // Set the new color here
 					};
 				}
 			});
@@ -30,7 +34,7 @@ async function processXLSXFile(filePath) {
 }
 
 // Get a list of all XLSX files in the current directory
-const currentDir = __dirname;
+const currentDir = __dirname + '/files';
 fs.readdirSync(currentDir).forEach(file => {
 	const filePath = path.join(currentDir, file);
 
