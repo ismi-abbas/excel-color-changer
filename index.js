@@ -12,8 +12,8 @@ async function processXLSXFile(filePath) {
 		worksheet.eachRow(row => {
 			row.eachCell(cell => {
 				if (
-					cell.address == 'C1' &&
-					cell.value == 'i-PIMS (PETRONAS Integrated Pipeline Integrity Assurance Solutions)'
+					cell.value === 'i-PIMS (PETRONAS Integrated Pipeline Integrity Assurance Solutions)' ||
+					cell.value === 'IPIMS (PETRONAS Integrated Pipeline Integrity Assurance Solutions)'
 				) {
 					cell.value = 'i-PIMS (Integrated Pipeline Integrity Assurance Solutions)';
 				}
@@ -35,6 +35,7 @@ async function processXLSXFile(filePath) {
 
 // Get a list of all XLSX files in the current directory
 const currentDir = __dirname + '/files';
+let successList = [];
 fs.readdirSync(currentDir).forEach(file => {
 	const filePath = path.join(currentDir, file);
 
@@ -43,6 +44,9 @@ fs.readdirSync(currentDir).forEach(file => {
 		processXLSXFile(filePath)
 			.then(() => {
 				console.log(`Processed and saved ${filePath}`);
+				const file = filePath.split('\\').pop().split('.')[0];
+				successList.push(file);
+				console.log(successList);
 			})
 			.catch(error => {
 				console.error(`Error processing ${filePath}: ${error.message}`);

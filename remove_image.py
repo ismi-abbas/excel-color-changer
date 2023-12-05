@@ -25,7 +25,7 @@ def process_xlsx_file(file_path):
                 # Add the new image to the sheet
                 potf_image = Image(new_image_file_path)
                 potf_image.height = 75
-                potf_image.width = 75
+                potf_image.width = 70
 
                 worksheet.add_image(potf_image, "B1")
 
